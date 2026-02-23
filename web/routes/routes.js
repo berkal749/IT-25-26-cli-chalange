@@ -8,24 +8,32 @@ const router = express.Router();
 //   "city": "Algiers"   example
 // }
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-const genAI = new GoogleGenerativeAI("AIzaSyCB6CtIcY0rVaPz08Q2N7FqLPHLuEOFk3c");
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 
 
-async function getCoordinates(cityName) {
-    const prompt = `Return the latitude and longitude of ${cityName} as a JSON object with the keys "lat" and "lon". Only return the JSON, nothing else.`;
+// MAJOR UPADTE: i used first gemine api and ope whthter to access it (explain in the last comment u think) now i discoverd that
+// google api can do the same thing as open weather api and it can give us the weather of any city without the need to get the coordinates first
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+
+// deprecated code :
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// const genAI = new GoogleGenerativeAI("AIzaSyCB6CtIcY0rVaPz08Q2N7FqLPHLuEOFk3c");
+// const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+
+
+// async function getCoordinates(cityName) {
+//     const prompt = `Return the latitude and longitude of ${cityName} as a JSON object with the keys "lat" and "lon". Only return the JSON, nothing else.`;
+
+//     const result = await model.generateContent(prompt);
+//     const response = await result.response;
+//     const text = response.text();
 
     
-    const cleanJson = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(cleanJson);
-}
+//     const cleanJson = text.replace(/```json|```/g, "").trim();
+//     return JSON.parse(cleanJson);
+// }
 
 
 
@@ -40,20 +48,17 @@ router.post('/weather', async (req, res) => {
     }
     
     try {
-        const apiKey = "a95a95f4e85ca9d612b04f8dbd33c7af"; 
+        // const apiKey = "a95a95f4e85ca9d612b04f8dbd33c7af"; 
         
        
-        const { lat, lon } = await getCoordinates(cityName);
+      //  const { lat, lon } = await getCoordinates(cityName);
   
       
-        const weatherUrl = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+        const weatherUrl;
         const weatherResponse = await fetch(weatherUrl);
         const weatherData = await weatherResponse.json();
-        res.json({
-            city: cityName,
-            coordinates: { lat, lon },
-            weather: weatherData
-        });
+        console.log(weatherData);
+        
 
     } catch (error) {
         console.error(error); 
