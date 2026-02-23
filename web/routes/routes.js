@@ -1,18 +1,29 @@
-const express = require('express');
-const router = express.Router(); 
-
-router.get('/weather',(req,res)=>{
-
-
-let apiKey= "a95a95f4e85ca9d612b04f8dbd33c7af"
+const express = require("express");
+const router = express.Router();
+const axios = require("axios");
 
 
 
+// {
+//   "city": "alger"  sample
+// }
 
+router.get("/weather", async (req, res) => {
+  let apiKey = "a95a95f4e85ca9d612b04f8dbd33c7af";
+  let city = req.body.city;
 
-
-
-
-
-})
+  try {
+    const weatherData = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`,
+    );
+    res.json({
+      city: weatherData.data.name,
+      temperature: weatherData.data.main.temp,
+      description: weatherData.data.weather[0].description,
+      humidity: weatherData.data.main.humidity,
+    });
+  } catch (error){
+    res.send(res.message);
+  }
+});
 module.exports = router;
