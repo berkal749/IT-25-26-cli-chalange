@@ -35,8 +35,7 @@ const router = express.Router();
 //     return JSON.parse(cleanJson);
 // }
 
-
-
+// i used now a lirvarry calles fused api to deal with typose soo i can send the names directly to the googel api
 
 
 router.post('/weather', async (req, res) => {
