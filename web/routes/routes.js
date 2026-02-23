@@ -19,12 +19,19 @@ router.get("/weather", async (req, res) => {
     const weatherData = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`,
     );
-    res.json({
+   const display= res.json({
       city: weatherData.data.name,
       temperature: weatherData.data.main.temp,
       description: weatherData.data.weather[0].description,
       humidity: weatherData.data.main.humidity,
     });
+
+    console.log({
+      city: weatherData.data.name,
+      temperature: weatherData.data.main.temp,
+      description: weatherData.data.weather[0].description,
+      humidity: weatherData.data.main.humidity,
+    })
   } catch (error){
     res.send(res.message);
   }
